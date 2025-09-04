@@ -1,6 +1,6 @@
 #include "microcontroller.h"
 #include <array>
-#include <iostream>
+#include <cstring>
 
 static Microcontroller* g_microcontroller = nullptr;
 
@@ -32,8 +32,8 @@ typedef struct {
 void Microcontroller_ProcessSensor(const SensorData_t* sensor) {
     if (!g_microcontroller || !sensor) return;
 
-    // Convert to Microcontroller::SensorData safely
-    Microcontroller::SensorData sensorData;
+    // Convert to SensorData struct
+    SensorData sensorData;
     for (size_t i = 0; i < 3; ++i) {
         sensorData.gyro[i] = sensor->gyro[i];
         sensorData.magnetometer[i] = sensor->magnetometer[i];
@@ -48,7 +48,7 @@ void Microcontroller_ProcessSensor(const SensorData_t* sensor) {
 void Microcontroller_GetActuatorCommands(ActuatorCommands_t* commands) {
     if (!g_microcontroller || !commands) return;
 
-    Microcontroller::ActuatorCommands actuators;
+    ActuatorCommands actuators;
     g_microcontroller->getActuatorCommands(actuators);
 
     for (size_t i = 0; i < 3; ++i) {
