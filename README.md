@@ -28,3 +28,33 @@ g++ -std=c++17 -I./inc -I./src \
     -o adcs_test_harness
 
 ./adcs_test_harness | python3 ../telemetry_bridge.py
+
+### Docker Build & Run
+
+1. Build the Docker image:
+```bash
+docker build -t adcs_cfs_sim:latest .
+
+docker run -it adcs_cfs_sim:latest
+
+cd fsw
+./adcs_test_harness | python3 /workspace/telemetry_bridge.py
+
+Save and exit. This ensures anyone can replicate your environment and run the simulation.
+
+---
+
+### **2️⃣ Enhance Fault Injection Documentation in DOC.md**
+
+Open your `DOC.md`:
+
+```bash
+vim DOC.md
+
+#### Fault Injection Mechanism
+
+- A controlled fault is introduced in the gyroscope sensor readings at cycle 10.
+- The fault sets `gyro[0] = 0` (or another predefined invalid value).
+- The Microcontroller class detects this fault in `performFaultDetection()`.
+- After 3 consecutive fault detections, the system automatically switches to safe mode.
+- The telemetry bridge prints `Status: FAULT` once the threshold is breached.
